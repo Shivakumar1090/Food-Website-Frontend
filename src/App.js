@@ -1,23 +1,28 @@
-import logo from './logo.svg';
+import ReactDOM from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import './App.css';
+
+import CustomerLogin from './components/pages/auth/customerLogin';
+import CustomerRegisteration from './components/pages/auth/cutomerRegister';
+import RestaurantRegisteration from './components/pages/auth/restarantRegister';
+import RestuarantLogin from './components/pages/auth/resturantLogin';
+import Welcome from './components/pages/welcome';
+import Navbar from './components/util/Navbar';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Welcome/>}/>
+          <Route path="/login/user" element={<CustomerLogin />}/>
+          <Route path="/login/restaurant" element={<RestuarantLogin />}/>
+          <Route path="/register/user" element={<CustomerRegisteration />}/>
+          <Route path="/register/restaurant" element={<RestaurantRegisteration />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
