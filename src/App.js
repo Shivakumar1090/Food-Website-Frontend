@@ -1,13 +1,11 @@
-import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import './App.css';
 
-import CustomerLogin from './components/pages/auth/customerLogin';
-import CustomerRegisteration from './components/pages/auth/cutomerRegister';
-import RestaurantRegisteration from './components/pages/auth/restarantRegister';
-import RestuarantLogin from './components/pages/auth/resturantLogin';
+import CustomerLogin from './components/pages/auth/login';
+import CustomerRegisteration from './components/pages/auth/Register';
 import Welcome from './components/pages/welcome';
+import Footer from "./components/util/Footer";
 import Navbar from './components/util/Navbar';
 
 function App() {
@@ -18,10 +16,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Welcome/>}/>
           <Route path="/login/user" element={<CustomerLogin />}/>
-          <Route path="/login/restaurant" element={<RestuarantLogin />}/>
           <Route path="/register/user" element={<CustomerRegisteration />}/>
-          <Route path="/register/restaurant" element={<RestaurantRegisteration />} />
         </Routes>
+        {/* <Footer /> */}
       </BrowserRouter>
     </div>
   );
