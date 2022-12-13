@@ -34,7 +34,8 @@ const ProductCard = () => {
 const card = {
     border: '2px solid #FFC000',
     borderRadius: '15px',
-    padding: '1px'
+    padding: '1px',
+    width: '280px',
 }
 
 
