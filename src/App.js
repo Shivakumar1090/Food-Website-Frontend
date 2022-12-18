@@ -1,14 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import './App.css';
+import "./App.css";
+import AdminProducts from "./adminPages/products";
 
-import CustomerLogin from './components/pages/auth/login';
-import CustomerRegisteration from './components/pages/auth/Register';
-import Cart from "./components/pages/Cart";
-import Product from "./components/pages/products/product";
-import Welcome from './components/pages/welcome';
-import Footer from "./components/util/Footer";
-import Navbar from './components/util/Navbar';
+import CustomerLogin from "./pages/auth/login";
+import CustomerRegisteration from "./pages/auth/Register";
+import Cart from "./pages/Cart";
+import ProductsList from "./pages/products";
+import Product from "./pages/products/product";
+import Welcome from "./pages/welcome";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
@@ -16,11 +17,14 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Welcome/>}/>
-          <Route path="/login/user" element={<CustomerLogin />}/>
-          <Route path="/register/user" element={<CustomerRegisteration />}/>
-          <Route path="/cart" element={<Cart />}/>
-          <Route path="/products" element={<Product />}/>
+          <Route path="/" element={<Welcome />} />
+          <Route path="/login/user" element={<CustomerLogin />} />
+          <Route path="/register/user" element={<CustomerRegisteration />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/product" element={<Product />} />
+          <Route path="/products" element={<ProductsList />} />
+
+          <Route path='/admin/products' element={<AdminProducts />}/>
         </Routes>
         {/* <Footer /> */}
       </BrowserRouter>
