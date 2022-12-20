@@ -1,20 +1,24 @@
 import { Button, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import Kaju from './kaj.jpeg'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
+import { useLocation } from "react-router-dom";
 
-const Product = () => {
+const DOMAIN = process.env.REACT_APP_DOMAIN;
+
+const Product = (props) => {
+    const {state} = useLocation();
+    console.log(state.details);
     return ( 
         <Box marginTop='100px'>
             <Box display='flex' padding='30px'>
-                <img src={Kaju} alt='' style={img}></img>
+                <img src={`${DOMAIN}/${state.details.img}`} alt='' style={img}></img>
                 <Box marginLeft='30px'>
                     <Typography style={rs}>MITHAI SHOP</Typography>
-                    <Typography style={name} marginTop='5px'>Amarchnta sweet</Typography>
-                    <Typography style={rs} marginTop='20px'>RS. 199</Typography>
+                    <Typography style={name} marginTop='5px'>{state.details.name}</Typography>
+                    <Typography style={rs} marginTop='20px'>RS. {state.details.price}</Typography>
                     <Typography style={heads} marginTop='20px'>Pack</Typography>
-                    <Button style={pack} size='medium'>200gm</Button>
+                    <Button style={pack} size='medium'>{state.details.grams} grams</Button>
                     <Typography style={heads} marginTop='20px'>Qauntity</Typography>
                     <Box style={qauntity}>
                         <AddOutlinedIcon />

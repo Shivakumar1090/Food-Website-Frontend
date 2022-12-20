@@ -5,7 +5,7 @@ const MessagePopup = ({open,message,handleAlertClose,severity}) => {
         <div>
             <Snackbar 
                 anchorOrigin={ {vertical: 'bottom' ,horizontal: 'right'}}
-                autoHideDuration={4000} 
+                autoHideDuration={3000} 
                 open={open}
                 message={message} 
                 onClose={handleAlertClose}

@@ -7,7 +7,7 @@ import { makeStyles } from "@mui/styles";
 import { Box } from "@mui/system";
 import Carousel from "react-material-ui-carousel";
 import { Paper } from "@mui/material";
-import ProductsList from "../products";
+import Products from "../products";
 
 const Welcome = () => {
   const classes = useStyles();
@@ -39,8 +39,7 @@ const Welcome = () => {
             ))}
           </Carousel>
         </Box>
-        <ProductsList />
-        {/* <ProductCard /> */}
+        {/* <Products /> */}
       </Box>
     </div>
   );
