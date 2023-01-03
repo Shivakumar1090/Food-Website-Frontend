@@ -13,18 +13,21 @@ const Welcome = () => {
   const classes = useStyles();
   var items = [
     {
+      id: 0,
       imageName: c1,
     },
     {
+      id: 1,
       imageName: c2,
     },
     {
+      id: 2,
       imageName: c3,
     },
   ];
   return (
     <div className={classes.container}>
-      <Box marginTop="6%">
+      <Box paddingTop='30px'>
         <Box
           style={{
             width: "75%",
@@ -35,7 +38,7 @@ const Welcome = () => {
         >
           <Carousel>
             {items.map((item) => (
-              <img src={item.imageName} className={classes.cimg} alt=""></img>
+              <img key={item.id} src={item.imageName} className={classes.cimg} alt=""></img>
             ))}
           </Carousel>
         </Box>

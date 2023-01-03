@@ -28,25 +28,33 @@ const AdminProducts = () => {
     const [pickedId,setPickedId] = useState("");
 
     useEffect(() => {
-        axios.get(GET_PRODUCTS)
-            .then(async (res) => {
-                await setData(res.data);
-                console.log(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        axios.get(GET_PRODUCTS , {
+            headers: {
+                Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+            },
+        })
+        .then(async (res) => {
+            await setData(res.data);
+            console.log(res.data);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
     }, []);
 
     const deleteHandler = (id) => {
         console.log(id);
-        axios.delete(DELETE_PRODUCT+id)
-            .then(() =>{
-                window.location.href="/admin/products";
-            })
-            .catch(err => {
-                console.log(err);
-            })
+        axios.delete(DELETE_PRODUCT+id , {
+            headers: {
+                Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+            },
+        })
+        .then(() =>{
+            window.location.href="/admin/products";
+        })
+        .catch(err => {
+            console.log(err);
+        })
     }
 
     const addHandler = (e) => {
@@ -60,7 +68,11 @@ const AdminProducts = () => {
         newProd.append("desc", desc);
        
         axios
-          .post(ADD_PRODUCT, newProd)
+          .post(ADD_PRODUCT, newProd ,{
+            headers: {
+                Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+            },
+          })
           .then(() => {
             console.log("saved");
             window.location.href="/admin/products";
@@ -78,7 +90,11 @@ const AdminProducts = () => {
         editData.append("price",editPrice);
         editData.append("img",editImg);
 
-        axios.put(EDIT_PRODUCT+id , editData)
+        axios.put(EDIT_PRODUCT+id , editData ,{
+            headers: {
+                Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+            },
+        })
         .then(() =>{
             window.location.href="/admin/products";
         })
@@ -181,21 +197,22 @@ const AdminProducts = () => {
     
 
     return ( 
-        <Box padding='120px 50px'>
+        <Box padding='30px'>
             <Box display='flex' justifyContent='space-between'>
                 <Typography style={heading}>Products</Typography>
                 <Button style={addBtn} onClick={()=>setOpenCreate(true)}>Add a product</Button>
             </Box>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             {
-                Data.map((product,key) => {
+                Data.map((product,hoverkey) => {
                     return(
                         <Grid item xs={6} key={product._id}>
                             <Paper style={row} 
                                 key={product._id}
-                                elevation= { key === selectedHover ? 3 : 0}
+                                hoverkey={product._id}
+                                elevation= { hoverkey === selectedHover ? 3 : 0}
                                 onMouseOut={() => setSelectedHovered(null)}
-                                onMouseOver={() =>setSelectedHovered(key)}
+                                onMouseOver={() =>setSelectedHovered(hoverkey)}
                             >
                             <Box display='flex'> 
                                 <img src={`${DOMAIN}/${product.img}`} alt='..' style={img}></img>
@@ -249,7 +266,6 @@ const row = {
 }
 
 const addBtn = {
-    fontFamily: "Varela Round",
     fontSize: '17px',
     color:'#791314',
     textDecoration:'underline',
@@ -257,7 +273,6 @@ const addBtn = {
 }
 
 const name = {
-    fontFamily: "Varela Round",
     fontSize: '22px',
     textAlign: 'center',
     marginTop: 'auto',
@@ -266,7 +281,6 @@ const name = {
 }
 
 const word = {
-    fontFamily: "Varela Round",
     fontSize: '15px',
     marginLeft: '15px',
 }
@@ -278,8 +292,6 @@ const img ={
 }
 
 const heading = {
-    fontFamily: "Varela Round",
-    color: "#791314",
     fontWeight: "bold",
     fontSize: "30px",
     marginBottom: "15px",

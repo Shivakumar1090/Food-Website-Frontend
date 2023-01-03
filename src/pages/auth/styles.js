@@ -2,12 +2,10 @@ const container = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    marginTop: "120px",
+    marginTop: "50px",
 }
 
 const heading = {
-  fontFamily: "Varela Round",
-  color: "#791314",
   fontWeight: "bold",
   fontSize: "30px",
   marginBottom: "20px",

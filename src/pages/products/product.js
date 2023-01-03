@@ -1,4 +1,5 @@
-import { Button, Typography } from "@mui/material";
+import React,{useState} from "react";
+import { Button, Chip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
@@ -8,38 +9,55 @@ const DOMAIN = process.env.REACT_APP_DOMAIN;
 
 const Product = (props) => {
     const {state} = useLocation();
-    console.log(state.details);
+
+    const [qauntity,setQuantity] = useState(1);
+
     return ( 
-        <Box marginTop='100px'>
-            <Box display='flex' padding='30px'>
-                <img src={`${DOMAIN}/${state.details.img}`} alt='' style={img}></img>
-                <Box marginLeft='30px'>
-                    <Typography style={rs}>MITHAI SHOP</Typography>
-                    <Typography style={name} marginTop='5px'>{state.details.name}</Typography>
-                    <Typography style={rs} marginTop='20px'>RS. {state.details.price}</Typography>
-                    <Typography style={heads} marginTop='20px'>Pack</Typography>
-                    <Button style={pack} size='medium'>{state.details.grams} grams</Button>
-                    <Typography style={heads} marginTop='20px'>Qauntity</Typography>
-                    <Box style={qauntity}>
-                        <AddOutlinedIcon />
-                        <Typography>4</Typography>
-                        <RemoveOutlinedIcon />
-                    </Box>
-                    <Button style={btn}>Add to cart</Button>
+        <Box  style={container} >
+            
+            <img src={`${DOMAIN}/${state.details.img}`} alt='' style={img}></img>
+            <Box marginLeft='30px'>
+                <Typography fontSize='15px'>MITHAI SHOP</Typography>
+                <Typography style={name} marginTop='5px'>{state.details.name}</Typography>
+                <Typography variant="h6" marginTop='10px'>Price. ₹ {state.details.price*qauntity}</Typography>
+                <Typography fontSize='18px' marginTop='20px'>Pack</Typography>
+                <Chip 
+                    label={<Typography variant="caption">{(state.details.grams*qauntity)/1000}{" "}Kilo Grams</Typography>} 
+                    size='medium' variant="filled" color="primary"
+                />
+                <Typography fontSize='18px' margin='20px 0px 5px 0px'>Qauntity</Typography>
+                <Box style={qauntityBox}>
+                    <AddOutlinedIcon cursor='pointer' onClick={() => setQuantity(qauntity+1)}/>
+                    <Typography>{qauntity}</Typography>
+                    <RemoveOutlinedIcon cursor='pointer' onClick={() => {if(qauntity > 1)setQuantity(qauntity-1)}}/>
                 </Box>
+                <Button style={btn}>Add to cart</Button>
+               
             </Box>
         </Box>
      );
 }
 
-const img = {
-    width: '40%',
-    height: '70vh',
-    borderRadius: '30px',
-    objectFit:'cover',
+const container = {
+    display: 'flex',
+    // justifyContent: 'center',
+    padding:'30px',
 }
 
-const qauntity = {
+const img = {
+    width: '45%',
+    height: '75vh',
+    borderRadius: '30px',
+    objectFit:'cover',
+    opacity: 1,
+    transition: '.5s ease',
+    backfaceVisibility: 'hidden',
+    '&:hover': {
+        opacity: 0.3,
+    },
+}
+
+const qauntityBox = {
     border: '1px solid #791341',
     padding: '10px',
     borderRadius: '50px',
@@ -52,33 +70,9 @@ const qauntity = {
 }
 
 const name = {
-    fontFamily: "Varela Round",
     fontSize: "25px",
-    color: '#791314',
     fontWeight: '600',
-    textTransform: 'uppercase',
-}
-
-const rs = {
-    fontFamily: "Varela Round",
-    fontSize: "25px",
-    color: '#9B4F50',
-}
-
-const heads = {
-    fontFamily: "Varela Round",
-    fontSize: "20px",
-    color: '#791314',
-}
-
-const pack = {
-    background: '#791314',
-    width: '100px',
-    borderRadius: '50px',
-    color: '#fff',
-    fontFamily: "Varela Round",
-    fontWeight: 'bold',
-    textTransform: "capitalize",
+    textTransform: 'capitailise',
 }
 
 const btn = {
@@ -86,7 +80,7 @@ const btn = {
     background: '#791314',
     color: '#fff',
     padding: '10px',
-    marginTop: '20px',
+    marginTop: '25px',
     fontSize: '18px',
     fontFamily: "Varela Round",
     textTransform: "capitalize",

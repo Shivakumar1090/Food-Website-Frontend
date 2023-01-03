@@ -1,90 +1,100 @@
-import { Button, Divider, Typography } from "@mui/material";
+import React,{useState} from "react";
+import { Button, Chip, Divider, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import Kaju from './kaj.jpeg'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
 import { Link } from "react-router-dom";
+import EmptyCart from "../../components/emptyCart";
 
 const Cart = () => {
+
+    const [check,setCheck] = useState(true);
     return ( 
-        <Box marginTop='100px' padding='30px' >
-            <Box style={{display:'flex', justifyContent:'space-between',}} >
-                <Typography style={heading}>Your Cart</Typography>
-                <Link to='/' style={{textDecoration: 'none'}}>
-                    <Typography style={{fontFamily: 'Varela Round',fontSize: '17px',color:'#791314',textDecoration:'underline'}}>Continue Shopping</Typography>
-                </Link>
-            </Box>
-            <Box style={{display: 'flex' ,color:'#9B4F50',marginBottom: '20px',width:'100%'}}>
-                <Box width='60%'>
-                    <Typography style={rowHead}>PRODUCT</Typography>
-                </Box>
-                <Box width='40%' display='flex' justifyContent='space-between'>
-                    <Typography style={rowHead}>QAUNTITY</Typography>
-                    <Typography style={rowHead}>TOTAL</Typography>
-                </Box>
-            </Box>
-            <Divider/>
-            <Box style={{display:'flex',color:'#9B4F50',margin:'20px 0px 30px 0px', width: '100%'}}>
-                <Box display='flex' width='60%' >
-                    <img src={Kaju} alt="" width="120px" height='120px'></img>
-                    <Box style={{marginTop: 'auto',marginBottom: 'auto', marginLeft: '20px'}}>
-                        <Typography style={name}>Andara Goli</Typography>
-                        <Typography style={{fontFamily: "Varela Round",fontSize: '15px'}}>Pack: 200gm</Typography>
+        <Box padding='70px 30px' >
+            {!check ? 
+                <EmptyCart></EmptyCart> 
+            : 
+                <Box>
+                    <Box style={{display:'flex', justifyContent:'space-between', marginBottom: '15px'}} >
+                        <Typography style={heading}>Your Cart</Typography>
+                        <Link to='/products' style={{textDecoration: 'none'}}>
+                            <Typography style={continueShopFont}>Continue Shopping</Typography>
+                        </Link>
+                    </Box>
+                    {/*---------------------------------- Products will be starting here----------------------------------- */}
+                    
+                    <TableContainer >
+                        <Table sx={{ minWidth: 650 }} >
+                            <TableHead>
+                                <TableRow >
+                                    <TableCell style={tableHeadFonts}>PRODUCT</TableCell>
+                                    <TableCell  style={tableHeadFonts}>QAUNTITY</TableCell>
+                                    <TableCell align="right" style={tableHeadFonts}>TOTAL</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                <TableRow>
+                                    <TableCell component="th" scope="row" style={{border: 'none'}}>
+                                        <Box display='flex'>
+                                            <img src={Kaju} alt="img" width="120px" height='120px'></img>
+                                            <Box margin='auto 0px auto 20px'>
+                                                <Typography fontSize='20px'  color='primary'>Kakinada Kaja</Typography>
+                                                <Typography fontSize= '15px' color='primary'>Pack: 200gm</Typography>
+                                            </Box>
+                                        </Box>
+                                    </TableCell>
+                                    <TableCell variant="body" align='right' style={{border: 'none'}} >
+                                            <Stack spacing={1} direction='row' color='#791314'>
+                                                <Chip 
+                                                    variant="outlined"
+                                                    color='primary'
+                                                    label={
+                                                        <Stack  spacing={2} direction='row' >
+                                                            <AddOutlinedIcon />
+                                                            <Typography>5</Typography>
+                                                            <RemoveOutlinedIcon />
+                                                        </Stack>
+                                                    } 
+                                                />
+                                                <DeleteOutlineOutlinedIcon />
+                                            </Stack>
+                                    </TableCell>
+                                    <TableCell align="right" style={{border: 'none',color: '#791314',fontSize: '15px'}}>₹ 1000</TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+
+                    <Divider />
+                    <Box textAlign='right' marginTop='20px' >
+                        <Typography>SubTotal. </Typography>
+                        <Button style={checkout}>Check Out</Button>
                     </Box>
                 </Box>
-                <Box width='42%' display='flex' justifyContent='space-between'>
-                    <Box display='flex'>
-                        <Box style={qauntity}>
-                            <AddOutlinedIcon />
-                            <Typography>4</Typography>
-                            <RemoveOutlinedIcon />
-                        </Box>
-                        <DeleteOutlineOutlinedIcon style={{marginTop: 'auto',marginBottom: 'auto',marginLeft: '10px'}}/>
-                    </Box>
-                    <Box style={{marginTop: 'auto',marginBottom: 'auto'}}>
-                        <Typography style={rowHead}>1000</Typography>
-                    </Box>
-                </Box>
-            </Box>
-            <Divider/>
-            <Box textAlign='right' marginTop='20px' color='#791314'>
-                <Typography style={{fontFamily: "Varela Round"}}>SubTotal. </Typography>
-                <Button style={checkout}>Check Out</Button>
-            </Box>
+            }
         </Box>
      );
 }
 
 const heading = {
-    fontFamily: "Varela Round",
-    color: "#791314",
     fontWeight: "bold",
     fontSize: "30px",
-    marginBottom: "15px",
 };
 
-const rowHead = {
-    fontFamily: "Varela Round",
-    fontSize: "15px",
+const tableHeadFonts = {
+    color:'#9B4F50',
+    fontSize: '18px'
 }
 
-const qauntity = {
-    border: '1px solid #791341',
-    padding: '10px',
-    borderRadius: '50px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    height: '20px',
-    width: '100px',
-    marginTop: 'auto',marginBottom: 'auto'
-}
- 
-const name = {
-    fontFamily: "Varela Round",
-    fontSize: "20px",
+const continueShopFont = {
+    fontSize: '17px',
+    textDecoration:'underline',
     color: '#791314',
+    marginTop: '10px',
 }
+
 
 const checkout = {
     width: '250px',
@@ -93,7 +103,6 @@ const checkout = {
     padding: '10px',
     marginTop: '10px',
     fontSize: '18px',
-    fontFamily: "Varela Round",
     textTransform: "capitalize",
 }
 export default Cart;

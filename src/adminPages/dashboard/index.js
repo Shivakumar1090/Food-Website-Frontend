@@ -1,14 +1,133 @@
-import { Box } from "@mui/system";
-import { Link } from "react-router-dom";
+// import './style.scss';
+import { useEffect, useState } from 'react';
+import { Box, Paper, Typography } from '@mui/material';
+import Navbar from '../../components/Navbar/index';
+import { Navigate, useNavigate } from 'react-router-dom';
+import GridViewSharpIcon from '@mui/icons-material/GridViewSharp';
+import AddCircleSharpIcon from '@mui/icons-material/AddCircleSharp';
+import ManageAccountsSharpIcon from '@mui/icons-material/ManageAccountsSharp';
+import AddShoppingCartSharpIcon from '@mui/icons-material/AddShoppingCartSharp';
+import ExitToAppSharpIcon from '@mui/icons-material/ExitToAppSharp';
+import DensitySmallSharpIcon from '@mui/icons-material/DensitySmallSharp';
+// import { getadminorders } from '../../../api/order';
+import { makeStyles } from '@mui/styles';
 
-const AdminDashboard = () => {
-    return ( 
-        <div>
-            <Box>
-                <Link to='/admin/products'>Products</Link>
+function AdminDashBoard() {
+    const navigate = useNavigate();
+    const classes = styles();
+
+    const [orders, setOrders] = useState([]);
+
+    // useEffect(() => {
+
+    //     getadminorders().then((res) => {
+    //         setOrders(res.data);
+    //     })
+
+    // }, [])
+
+
+    return <>{localStorage.getItem("isAdmin") ? <Box className={classes.adminDashboard}>
+        {/* <Navbar /> */}
+        <Box className={classes.dashboard}>
+            <Box className={classes.sidebar}>
+                <Box onClick={() => navigate("/admin")} className={classes.sidebarMenu}>
+                    <GridViewSharpIcon color='primary' className={classes.menuIcon} />
+                    <Typography>
+                        DASHBOARD
+                    </Typography>
+                </Box>
+                <Box onClick={() => navigate("/admin/products")} className={classes.sidebarMenu}>
+                    <DensitySmallSharpIcon color="primary" className={classes.menuIcon} />
+                    <Typography>
+                        MY PRODUCTS
+                    </Typography>
+                </Box>
+                <Box onClick={() => navigate("/admin/orders")} className={classes.sidebarMenu}>
+                    <AddShoppingCartSharpIcon color='primary' className={classes.menuIcon}/>
+                    <Typography>
+                        ORDERS
+                    </Typography>
+                </Box>
+                <Box onClick={() => navigate("/dashboard")} className={classes.sidebarMenu}>
+                    <ManageAccountsSharpIcon color='primary' className={classes.menuIcon} />
+                    <Typography>
+                        ACCOUNT SETTINGS
+                    </Typography>
+                </Box>
+                <Box onClick={() => { localStorage.clear(); navigate("/") }} className={classes.sidebarMenu}>
+                    <ExitToAppSharpIcon color='primary' className={classes.menuIcon} />
+                    <Typography>
+                        LOGOUT
+                    </Typography>
+                </Box>
+
+
             </Box>
-        </div>
-     );
+            <Box className={classes.statsContainer}>
+                <Paper className={classes.orders} elevation={4}>
+                    <Typography variant='h6' style={{ fontWeight: "bolder" }} color='primary' >Total Orders</Typography>
+                    <Typography variant='h5' style={{ fontWeight: "bolder" }} >{orders.length}</Typography>
+
+                </Paper>
+                <Paper className={classes.orders} elevation={4}>
+                    <Typography variant='h6' style={{ fontWeight: "bolder" }} color='secondary' > Accepted Orders</Typography>
+                    <Typography variant='h5' style={{ fontWeight: "bolder" }} >{orders.length}</Typography>
+                </Paper>
+                <Paper className={classes.orders} elevation={4}>
+                    <Typography variant='h6' style={{ fontWeight: "bolder" }} color='secondary' >Cancelled Orders </Typography>
+                    <Typography variant='h5' style={{ fontWeight: "bolder" }} >{orders.length}</Typography>
+                </Paper>
+                <Paper className={classes.orders} elevation={4}>
+                    <Typography variant='h6' style={{ fontWeight: "bolder" }} color='secondary' >Delivered Orders </Typography>
+                    <Typography variant='h5' style={{ fontWeight: "bolder" }} >{orders.length}</Typography>
+                </Paper>
+            </Box>
+        </Box>
+    </Box> : <Navigate to="/" />}</>;
 }
- 
-export default AdminDashboard;
+
+const styles = makeStyles({
+    adminDashboard: {
+        margin: 0,
+        padding: 0,
+    },
+    dashboard:{
+        display: "flex",
+        flexDirection: "row",
+        height: "90vh",
+        backgroundColor: "#00dadafa",
+    },
+    sidebar:{
+        width: '250px',
+        // height: "100vh"
+        backgroundColor: "white",
+    },
+    sidebarMenu:{
+        display: "flex",
+        alignItems: "center",
+        margin: "10% 0",
+        cursor: "pointer",
+    },
+    menuIcon: {
+        margin: '0 5%',
+    },
+    statsContainer: {
+        display: "flex",
+        flexDirection: 'row',
+        justifyContent: "space-evenly",
+        alignItems: "center",
+        width: "100%",
+    },
+    orders: {
+        display: "flex",
+        flexDirection: 'row',
+        justifyContent: "space-evenly",
+        alignItems: "center",
+        width: "200px",
+        height: "100px",
+    }
+})
+
+export default AdminDashBoard;
+
