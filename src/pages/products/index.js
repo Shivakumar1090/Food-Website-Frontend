@@ -1,60 +1,60 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Chip, Divider, Paper, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const {GET_PRODUCTS} = require('../../apis/products');
+const { GET_PRODUCTS } = require('../../apis/products');
 
 const DOMAIN = process.env.REACT_APP_DOMAIN;
 
 const Products = () => {
     const Navigate = useNavigate();
 
-    const [selectedHover,setSelectedHovered] = useState(null);
+    const [selectedHover, setSelectedHovered] = useState(null);
 
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
         axios
-        .get(GET_PRODUCTS , {
-            headers: {
-                Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-            },
-        })
-        .then(async (res) => {
-            await setProducts(res.data);
-            console.log(products);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+            .get(GET_PRODUCTS, {
+                headers: {
+                    Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+                },
+            })
+            .then(async (res) => {
+                await setProducts(res.data);
+                console.log(products);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }, []);
 
-    return ( 
+    return (
         <div>
             <Box padding='40px'>
                 <Typography variant='h5' style={heading}>Our Products</Typography>
-                <Divider color="#eee" light/>
+                <Divider color="#eee" light />
                 <Box style={list}>
-                    {products.map((single , hoveringkey) => {
-                        return(
-                            <Paper 
-                                key={single._id} 
-                                hoveringkey ={single._id}
-                                style={paper} 
-                                onClick = {() => Navigate(`/product/${single._id}`,{state: {details: single}})}
-                                elevation= { hoveringkey === selectedHover ? 10 : 1}
+                    {products.map((single, hoveringkey) => {
+                        return (
+                            <Paper
+                                key={single._id}
+                                hoveringkey={single._id}
+                                style={paper}
+                                onClick={() => Navigate(`/product/${single._id}`, { state: { details: single } })}
+                                elevation={hoveringkey === selectedHover ? 10 : 1}
                                 onMouseOut={() => setSelectedHovered(null)}
-                                onMouseOver={() =>setSelectedHovered(hoveringkey)}
+                                onMouseOver={() => setSelectedHovered(hoveringkey)}
                             >
                                 <img src={`${DOMAIN}/${single.img}`} alt={single.name} style={img}></img>
                                 <Stack spacing={0.3} direction='column' padding='10px' color='#791314'>
                                     <Typography style={prodName}>{single.name}</Typography>
                                     <Typography fontWeight='700' >₹ {single.price}</Typography>
                                     <Box>
-                                        <Chip 
-                                            label={<Typography variant="caption">{single.grams}{" "}grams</Typography>} 
+                                        <Chip
+                                            label={<Typography variant="caption">{single.grams}{" "}grams</Typography>}
                                             size='small' variant="outlined" color="primary"
                                         />
                                     </Box>
@@ -65,7 +65,7 @@ const Products = () => {
                 </Box>
             </Box>
         </div>
-     );
+    );
 }
 
 const heading = {
@@ -81,16 +81,16 @@ const list = {
     gap: '20px',
     rowGap: '50px',
     justifyContent: 'space-evenly',
-    "@media only screen and (max-width: 726px)": {
-        gridTemplateColumns: 'auto auto',
-    }
+    // "@media only screen and (max-width: 726px)": {
+    //     gridTemplateColumns: 'auto auto',
+    // }
 }
 
 const paper = {
     height: '380px',
     width: '280px',
     cursor: 'pointer',
-   
+
 }
 
 const img = {
@@ -107,5 +107,5 @@ const prodName = {
     fontWeight: '400',
     textTransform: 'capitalize',
 }
- 
+
 export default Products;

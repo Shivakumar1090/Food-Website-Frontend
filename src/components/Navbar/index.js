@@ -8,8 +8,13 @@ import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import LadduImg from "./laddu.png";
 
+import { useSelector } from "react-redux";
+
 
 const Navbar = (props) => {
+    const getData = useSelector((state) => state.Cart_Reducer);
+    // console.log(getData);
+
     const {isAuth,setIsAuth}=props;
 
     const logoutHandler = () => {
@@ -21,9 +26,9 @@ const Navbar = (props) => {
         <div>
             <Box style={appbar} elevation={0}>
                 <Stack spacing={1} direction='row' style={autoMargins}>
-                    <img src={LadduImg} alt="" style={{ width: "35px", height: "30px",}} />
+                    <img src={LadduImg} alt="" style={{ width: "30px", height: "30px",}} />
                     <Link to="/" style={{ textDecoration: "none" }}>
-                        <Typography style={logo}>sWeee shopp</Typography>
+                        <Typography style={logo}>sWeee_sHopp</Typography>
                     </Link>
                 </Stack>
                 <Box style={searchBar}>
@@ -48,7 +53,7 @@ const Navbar = (props) => {
                         }
                         <Link to="/cart" style={{ textDecoration: "none"}} >
                             <Tooltip title='Cart' arrow disableInteractive>
-                                <Badge badgeContent='1' color="primary" overlap="circular">
+                                <Badge badgeContent={getData.length} color="primary" overlap="circular">
                                     <LocalMallOutlinedIcon style={icon}/>
                                 </Badge>
                             </Tooltip>
