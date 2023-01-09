@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Chip, Divider, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Button, Chip, Divider, Modal, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
@@ -7,7 +7,7 @@ import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
 import EmptyCart from "../../components/emptyCart";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-
+import Address from "./address";
 import { AddCartItem, DeleteCartItem, DecreaseCartItem } from "../../redux/actions/cart";
 import axios from "axios";
 
@@ -17,6 +17,8 @@ const DOMAIN = process.env.REACT_APP_DOMAIN;
 const Cart = () => {
     const Navigate = useNavigate();
     const dispath = useDispatch();
+
+    const [openAddress ,setOpenAddress] = useState(false);
     const [totalPrice, setTotalPrice] = useState(0);
 
     const CartReduxData = useSelector((state) => state.Cart_Reducer);
@@ -131,10 +133,11 @@ const Cart = () => {
 
                     <Box textAlign='right' marginTop='20px' >
                         <Typography>SubTotal.  ₹{totalPrice}</Typography>
-                        <Button style={checkout}>Check Out</Button>
+                        <Button style={checkout} onClick={() => setOpenAddress(true)}>Check Out</Button>
                     </Box>
                 </Box>
             }
+            <Modal open={openAddress} onClose={()=>setOpenAddress(false)}>{<Address setOpenAddress={setOpenAddress} total={totalPrice}/>}</Modal>
         </Box>
     );
 }

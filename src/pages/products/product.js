@@ -4,7 +4,7 @@ import { Box } from "@mui/system";
 import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import MessagePopup from "../../components/MessagePopup";
-
+import { toast } from 'react-toastify';
 import { AddCartItem } from "../../redux/actions/cart";
 import axios from "axios";
 
@@ -39,9 +39,10 @@ const Product = (props) => {
     const add_item_cart = async(item) => {
         dispath(AddCartItem({...item}));
         UpdateCartBackend(item,"ADD_ITEM");
-        setOpenPopUp(true);
-        await setSeverityMsg("success");
-        await setResp("Item added successfully");
+        // setOpenPopUp(true);
+        toast.success("Item added successfully");
+        // await setSeverityMsg("success");
+        // await setResp("Item added successfully");
     }
 
     return (

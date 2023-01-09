@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "./App.css";
 
 import AdminProducts from "./adminPages/products";
@@ -16,6 +17,10 @@ import Product from "./pages/products/product";
 import Welcome from "./pages/welcome";
 import Navbar from "./components/Navbar";
 import Products from "./pages/products";
+import Payment from "./pages/payment/payment";
+import OrdersSection from "./pages/orders/orders";
+
+
 
 function App() {
   const [isAuth, setIsAuth] = useState(window.localStorage.getItem("isAuth"));
@@ -38,11 +43,22 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/product/:id" element={<Product />} />
 
+            <Route path="/orders" element={<OrdersSection />}/>
+            <Route path="/payment" element={<Payment />}/>
+
             <Route path='/admin' element={<AdminDashBoard />} />
             <Route path='/admin/orders' element={<AdminOrders />} />
             <Route path='/admin/products' element={<AdminProducts />} />
           </Routes>
         </BrowserRouter>
+        <ToastContainer
+            position="bottom-right"
+            autoClose={3000}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            draggable
+          />
       </ThemeProvider>
     </div>
   );

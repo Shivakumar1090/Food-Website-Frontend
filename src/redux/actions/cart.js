@@ -1,5 +1,5 @@
 const AddCartItem = (item) => {
-    return{
+    return {
         type: 'ADD_ITEM',
         payload: item,
     }
@@ -19,5 +19,12 @@ const DeleteCartItem = (item) => {
     }
 }
 
+const ClearCart = () => {
+    return {
+        type: 'CLEAR',
+        payload: {}
+    }
+}
 
-export { AddCartItem, DeleteCartItem, DecreaseCartItem };
+
+export { AddCartItem, DeleteCartItem, DecreaseCartItem, ClearCart };
