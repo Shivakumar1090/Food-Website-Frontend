@@ -1,6 +1,6 @@
-import { Badge, InputAdornment, InputBase, Stack, Tooltip, Typography } from "@mui/material";
+import { Badge, Button, InputAdornment, InputBase, Stack, Tooltip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
@@ -8,17 +8,18 @@ import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import LadduImg from "./laddu.png";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Logout } from "../../redux/actions/user";
 
 
-const Navbar = (props) => {
-    const getData = useSelector((state) => state.Cart_Reducer);
-    // console.log(getData);
-
-    const {isAuth,setIsAuth}=props;
+const Navbar = () => {
+    const Navigate = useNavigate();
+    const dispatch = useDispatch();
+    const cart = useSelector((state) => state.cart);
+    const user = useSelector((state) => state.user);
 
     const logoutHandler = () => {
-        setIsAuth(false);
+        dispatch(Logout());
         window.localStorage.clear();
         window.location.href="/";
     };
@@ -31,7 +32,7 @@ const Navbar = (props) => {
                         <Typography style={logo}>sWeee_sHopp</Typography>
                     </Link>
                 </Stack>
-                <Box style={searchBar}>
+                {/* <Box style={searchBar}>
                     <InputBase
                         placeholder="Search"
                         style={{width:'500px', color: '#791314'}}
@@ -41,33 +42,33 @@ const Navbar = (props) => {
                             </InputAdornment>
                         }
                     />
-                </Box>
+                </Box> */}
                 
                 <Box style={autoMargins}>
                     <Stack spacing={2} direction='row' style={autoMargins}>
                         {
-                            isAuth && 
+                            user.isLogged && 
                             <Typography color='primary' style={autoMargins}>
-                                Hi... {window.localStorage.getItem("name")} 
+                                Hi... {user.name} 
                             </Typography>
+                        }
+                        {user.isLogged && 
+                            <Button onClick={() => Navigate('/orders')}>Your Orders</Button>
                         }
                         <Link to="/cart" style={{ textDecoration: "none"}} >
                             <Tooltip title='Cart' arrow disableInteractive>
-                                <Badge badgeContent={getData.length} color="primary" overlap="circular">
+                                <Badge badgeContent={cart.length} color="primary" overlap="circular">
                                     <LocalMallOutlinedIcon style={icon}/>
                                 </Badge>
                             </Tooltip>
                         </Link>
-                        {
-                            isAuth ? 
-                                <Tooltip title="Logout" arrow disableInteractive>
-                                    <LogoutIcon style={icon} cursor='pointer' onClick={logoutHandler}></LogoutIcon>
-                                </Tooltip> 
-                            : 
-                                <Link to="/login" style={{ textDecoration: "none"}}>
-                                    <AccountCircleOutlinedIcon style={icon} />
-                                </Link>
-                        }
+                        {user.isLogged ? 
+                            <Tooltip title="Logout" arrow disableInteractive>
+                                <LogoutIcon style={icon} cursor='pointer' onClick={logoutHandler}></LogoutIcon>
+                            </Tooltip> : 
+                            <Link to="/login" style={{ textDecoration: "none"}}>
+                                <AccountCircleOutlinedIcon style={icon} />
+                            </Link>}
                     </Stack>
                 </Box>
             </Box>

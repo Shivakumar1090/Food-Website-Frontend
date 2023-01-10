@@ -18,13 +18,14 @@ const Cart = () => {
     const Navigate = useNavigate();
     const dispath = useDispatch();
 
-    const [openAddress ,setOpenAddress] = useState(false);
+    const [openAddress, setOpenAddress] = useState(false);
     const [totalPrice, setTotalPrice] = useState(0);
 
-    const CartReduxData = useSelector((state) => state.Cart_Reducer);
+    const cart = useSelector((state) => state.cart);
+    const user = useSelector((state) => state.user);
 
     const UpdateCartBackend = (item, type) => {
-        const userId = window.localStorage.getItem("id");
+        const userId = user._id;
         const data = {
             itemId: item._id,
             quantity: item.count,
@@ -57,15 +58,15 @@ const Cart = () => {
     useEffect(() => {
         let p = 0;
         // eslint-disable-next-line array-callback-return
-        CartReduxData.map((ele, k) => {
+        cart.map((ele, k) => {
             p = Number(ele.price) * (ele.count) + p;
         });
         setTotalPrice(p);
-    }, [CartReduxData])
+    }, [cart])
 
     return (
         <Box padding='70px 30px' >
-            {CartReduxData.length === 0 ?
+            {cart.length === 0 ?
                 <EmptyCart></EmptyCart>
                 :
                 <Box>
@@ -75,69 +76,68 @@ const Cart = () => {
                             <Typography style={continueShopFont}>Continue Shopping</Typography>
                         </Link>
                     </Box>
-                    {/*---------------------------------- Products will be starting here----------------------------------- */}
-
+                    
                     <TableContainer >
-                        <Table  >
-                            <TableHead>
-                                <TableRow >
-                                    <TableCell style={tableHeadFonts}>PRODUCT</TableCell>
-                                    <TableCell style={tableHeadFonts}>QAUNTITY</TableCell>
-                                    <TableCell align="right" style={tableHeadFonts}>TOTAL</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {
-                                    CartReduxData.map(cartItem => {
-                                        return (
-                                            <TableRow key={cartItem._id}>
-                                                <TableCell component="th" scope="row" style={{ border: 'none' }}>
-                                                    <Box
-                                                        key={cartItem._id}
-                                                        display='flex'
-                                                        onClick={() => Navigate(`/product/${cartItem._id}`, { state: { details: cartItem } })}
-                                                    >
-                                                        <img src={`${DOMAIN}/${cartItem.img}`} alt="img" width="120px" height='120px' style={{ cursor: 'pointer' }}></img>
-                                                        <Box margin='auto 0px auto 20px' style={{ cursor: 'pointer' }}>
-                                                            <Typography fontSize='20px' color='primary'>{cartItem.name}</Typography>
-                                                            <Typography fontSize='15px' color='primary'>Pack: {cartItem.grams} Grams</Typography>
-                                                        </Box>
-                                                    </Box>
-                                                </TableCell>
-                                                <TableCell variant="body" align='right' style={{ border: 'none' }} >
-                                                    <Stack spacing={1} direction='row' color='#791314'>
-                                                        <Chip
-                                                            variant="outlined"
-                                                            color='primary'
-                                                            label={
-                                                                <Stack spacing={2} direction='row' >
-                                                                    <AddOutlinedIcon cursor='pointer' onClick={() => handleIncrease(cartItem)} />
-                                                                    <Typography>{cartItem?.count}</Typography>
-                                                                    <RemoveOutlinedIcon cursor='pointer' onClick={() => handleDecrease(cartItem)} />
-                                                                </Stack>
-                                                            }
-                                                        />
-                                                        <DeleteOutlineOutlinedIcon cursor='pointer' onClick={() => handleDelete(cartItem)} />
-                                                    </Stack>
-                                                </TableCell>
-                                                <TableCell align="right" style={{ border: 'none', color: '#791314', fontSize: '15px' }}>₹ {cartItem.price * cartItem?.count}</TableCell>
-                                            </TableRow>
-                                        )
-                                    })
-                                }
-                            </TableBody>
-                        </Table>
+                    <Table  >
+                        <TableHead>
+                            <TableRow >
+                                <TableCell style={tableHeadFonts}>PRODUCT</TableCell>
+                                <TableCell style={tableHeadFonts}>QAUNTITY</TableCell>
+                                <TableCell align="right" style={tableHeadFonts}>TOTAL</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {cart.map(cartItem => {
+                                return (
+                                    <TableRow key={cartItem._id}>
+                                        <TableCell component="th" scope="row" style={{ border: 'none' }}>
+                                            <Box
+                                                key={cartItem._id}
+                                                display='flex'
+                                                onClick={() => Navigate(`/product/${cartItem._id}`, { state: { details: cartItem } })}
+                                            >
+                                                <img src={`${DOMAIN}/${cartItem.img}`} alt="img" width="120px" height='120px' style={{ cursor: 'pointer' }}></img>
+                                                <Box margin='auto 0px auto 20px' style={{ cursor: 'pointer' }}>
+                                                    <Typography fontSize='20px' color='primary'>{cartItem.name}</Typography>
+                                                    <Typography fontSize='15px' color='primary'>Pack: {cartItem.grams} Grams</Typography>
+                                                </Box>
+                                            </Box>
+                                        </TableCell>
+                                        <TableCell variant="body" align='right' style={{border: 'none'}}>
+                                            <Stack spacing={1} direction='row' color='#791314'>
+                                                <Chip
+                                                    variant="outlined"
+                                                    color='primary'
+                                                    label={
+                                                        <Stack spacing={2} direction='row' >
+                                                            <AddOutlinedIcon cursor='pointer' onClick={() => handleIncrease(cartItem)} />
+                                                            <Typography>{cartItem?.count}</Typography>
+                                                            <RemoveOutlinedIcon cursor='pointer' onClick={() => handleDecrease(cartItem)} />
+                                                        </Stack>
+                                                    }
+                                                />
+                                                <DeleteOutlineOutlinedIcon cursor='pointer' onClick={() => handleDelete(cartItem)} />
+                                            </Stack>
+                                        </TableCell>
+                                        <TableCell align="right" style={{ border: 'none', color: '#791314', fontSize: '15px' }}>
+                                            ₹ {cartItem.price * cartItem?.count}
+                                        </TableCell>
+                                    </TableRow>
+                                )
+                            })}
+                        </TableBody>
+                    </Table>
                     </TableContainer>
-
                     <Divider />
-
                     <Box textAlign='right' marginTop='20px' >
                         <Typography>SubTotal.  ₹{totalPrice}</Typography>
                         <Button style={checkout} onClick={() => setOpenAddress(true)}>Check Out</Button>
                     </Box>
                 </Box>
             }
-            <Modal open={openAddress} onClose={()=>setOpenAddress(false)}>{<Address setOpenAddress={setOpenAddress} total={totalPrice}/>}</Modal>
+            <Modal open={openAddress} onClose={() => setOpenAddress(false)}>
+                <Address setOpenAddress={setOpenAddress} total={totalPrice} />
+            </Modal>
         </Box>
     );
 }

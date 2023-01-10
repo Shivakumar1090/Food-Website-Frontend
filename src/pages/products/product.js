@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Button, Chip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import MessagePopup from "../../components/MessagePopup";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from 'react-toastify';
 import { AddCartItem } from "../../redux/actions/cart";
 import axios from "axios";
@@ -14,13 +13,12 @@ const DOMAIN = process.env.REACT_APP_DOMAIN;
 const Product = (props) => {
     const dispath = useDispatch();
     const { state } = useLocation();
+    const Navigate = useNavigate();
 
-    const [openPopUp, setOpenPopUp] = useState(false);
-    const [resp, setResp] = useState("");
-    const [severityMsg, setSeverityMsg] = useState("info");
+    const user = useSelector(state => state.user);
 
     const UpdateCartBackend = (item,type) => {
-        const userId = window.localStorage.getItem("id");
+        const userId = user._id;
         const data = {
             itemId: item._id,
             quantity: item.count || 0,
@@ -37,12 +35,16 @@ const Product = (props) => {
     }
 
     const add_item_cart = async(item) => {
-        dispath(AddCartItem({...item}));
-        UpdateCartBackend(item,"ADD_ITEM");
-        // setOpenPopUp(true);
-        toast.success("Item added successfully");
-        // await setSeverityMsg("success");
-        // await setResp("Item added successfully");
+        const userId = user._id;
+        if(!userId){
+            toast.warning("please LOGIN to continue!");
+            Navigate('/login')
+        }
+        else{
+            dispath(AddCartItem({...item}));
+            UpdateCartBackend(item,"ADD_ITEM");
+            toast.success("Item added successfully");
+        }
     }
 
     return (
@@ -63,19 +65,13 @@ const Product = (props) => {
                 <Button  style={btn} onClick={()=> add_item_cart(state.details)}>Add to cart</Button>
 
             </Box>
-            <MessagePopup
-                message={resp}
-                open={openPopUp}
-                handleAlertClose={() => setOpenPopUp(!openPopUp)}
-                severity={severityMsg}
-            />
+            
         </Box>
     );
 }
 
 const container = {
     display: 'flex',
-    // justifyContent: 'center',
     padding: '30px',
 }
 

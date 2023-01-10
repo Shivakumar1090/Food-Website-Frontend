@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import './style.css';
+
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Radio, TextField, Typography } from "@mui/material";
 import { useLocation, useNavigate, } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import { ClearCart } from "../../redux/actions/cart";
-
 const { CREATE_ORDER } = require('../../apis/order');
 
 const Payment = (props) => {
@@ -13,12 +14,10 @@ const Payment = (props) => {
     const dispath = useDispatch();
     const Navigate = useNavigate();
 
+    const user = useSelector(state => state.user);
+
     const orderState = state.details;
     const [mode, setMode] = useState('COD');
-
-    // if (!state) {
-        
-    // }
 
     const address = orderState.address.houseNo + ", " +
         orderState.address.street + ", " +
@@ -26,7 +25,7 @@ const Payment = (props) => {
 
     const handleAbort = () => {
         Navigate('/products');
-        toast.info("payment aborted!")
+        toast.info("payment aborted!");
     }
 
     const placeOrder = () => {
@@ -34,10 +33,11 @@ const Payment = (props) => {
             ...orderState, 
             paymentMode: 'COD'
         }
+        console.log(newOrder);
         axios
             .post(CREATE_ORDER, newOrder, {
                 headers: {
-                    Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+                    Authorization: `Bearer ${user.token}`,
                 },
             })
             .then((res) => {
@@ -52,6 +52,7 @@ const Payment = (props) => {
                 console.log(err);
             });
     }
+
     return (
         <div>
             <Box className='payment-wrapper'>

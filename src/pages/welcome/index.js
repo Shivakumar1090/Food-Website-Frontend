@@ -6,11 +6,11 @@ import Button from "@mui/material/Button";
 import { makeStyles } from "@mui/styles";
 import { Box } from "@mui/system";
 import Carousel from "react-material-ui-carousel";
-import { Paper } from "@mui/material";
-import Products from "../products";
+import { useNavigate } from "react-router-dom";
 
 const Welcome = () => {
   const classes = useStyles();
+  const Navigate = useNavigate();
   var items = [
     {
       id: 0,
@@ -42,7 +42,10 @@ const Welcome = () => {
             ))}
           </Carousel>
         </Box>
-        {/* <Products /> */}
+        <Box textAlign='center' marginTop='15px'>
+          <Typography fontSize='20px' fontWeight='bold'>For all your Family buy our sweets</Typography>
+          <Button variant="outlined"  marginTop='10px' onClick={() => Navigate('/products')}>Shop Now!</Button>
+        </Box>
       </Box>
     </div>
   );
@@ -56,7 +59,7 @@ const useStyles = makeStyles({
   cimg: {
     objectFit: "cover",
     width: "100%",
-    height: "70vh",
+    height: "65vh",
     borderRadius: "30px",
     "@media only screen and (max-width: 720px)": {
       height: "30vh",

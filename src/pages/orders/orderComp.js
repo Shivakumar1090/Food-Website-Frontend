@@ -8,10 +8,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Button from '@mui/material/Button';
-import Rating from '@mui/material/Rating';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-// import { editOrder } from '../../../api/Order';
-import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
@@ -32,8 +29,7 @@ const Order = ({ data, fetchOrders }) => {
   });
 
   const statusIndex = statusOptions.indexOf(data?.status || '')
-  const nextState = (statusIndex === statusOptions.length) ? null :
-    statusOptions[statusIndex + 1];
+  const nextState = (statusIndex === statusOptions.length) ? null : statusOptions[statusIndex + 1];
 
     const editOrder = async (payload, orderId) => {
         try {
@@ -97,7 +93,9 @@ const Order = ({ data, fetchOrders }) => {
         <KeyValue left="Order Status:" value={data?.status} />
         <KeyValue left="Payment Mode:" value={data?.paymentMode === 'COD' ? 'Cash On delivery' : data?.paymentMode} />
         <Box display="flex" marginTop="15px" gap="20px">
-          {data?.status !== 'Cancelled' && data?.status !== 'Completed' && <Button variant="contained" className='cancel-btn' onClick={() => onEditOrder({status: 'Cancelled'})}>Cancel</Button>}
+          {data?.status === 'Placed' | data?.status === 'Accepted' &&
+          <Button variant="contained" className='cancel-btn' onClick={() => onEditOrder({status: 'Cancelled'})}>Cancel</Button>
+          }
         </Box>
       </CardContent>
     </Card>

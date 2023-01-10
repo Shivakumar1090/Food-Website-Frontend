@@ -1,19 +1,18 @@
 import React, { useState } from "react";
 import { Box, Button, InputBase, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
-import MessagePopup from "../../components/MessagePopup";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { UpdateUser } from "../../redux/actions/user";
 const { container, input, heading } = require("./styles");
 
 const { LOGIN } = require('../../apis/user');
 
 const CustomerLogin = () => {
+    const dispatch = useDispatch();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
-    const [openPopUp, setOpenPopUp] = useState(false);
-    const [resp, setResp] = useState("");
-    const [severityMsg, setSeverityMsg] = useState("error");
 
     const LoginHandler = () => {
         const checkuser = {
@@ -22,24 +21,17 @@ const CustomerLogin = () => {
         }
 
         axios.post(LOGIN, checkuser)
-            .then(async (res) => {
-                console.log(res);
-                await setResp(res.data.Message);
-                await res.status === 200 ? setSeverityMsg("success") : setSeverityMsg("warning");
-                window.localStorage.setItem("token", res.data.token);
-                window.localStorage.setItem("id", res.data.user._id);
-                window.localStorage.setItem("name", res.data.user.name);
-                window.localStorage.setItem("isAuth", true);
-                window.localStorage.setItem("isAdmin", res.data.user.admin);
-                window.location.href = "/products";
+            .then(async (resp) => {
+                console.log(resp);
+                dispatch(UpdateUser({ ...resp.data, isLogged: true,}));
+                resp.status === 200 ? toast.success("Successfully Logged in") : toast.warn(resp.data.Message);
+                if(resp.data.isAdmin === true)window.location.href='/admin'
+                else window.location.href='/products'
             })
             .catch(async (err) => {
                 console.log(err);
-                setResp(err.response.data.Message);
-                err.response.status === 301 ? setSeverityMsg("warning") : setSeverityMsg("error");
+                err.response.status === 301 ? toast.warn(err.response.data.Message) : toast.warn(err.response.data.Message);
             })
-        setOpenPopUp(true);
-        setSeverityMsg("");
     }
 
     return (
@@ -63,12 +55,6 @@ const CustomerLogin = () => {
                 Don't have an account yet?{" "}
                 <span> <Link to="/register" style={{ color: '#791314' }}> Signup </Link> </span>
             </Typography>
-            <MessagePopup
-                message={resp}
-                open={openPopUp}
-                handleAlertClose={() => setOpenPopUp(!openPopUp)}
-                severity={severityMsg}
-            />
         </Box>
     );
 }

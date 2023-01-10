@@ -3,49 +3,54 @@ import { Button, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const Address = ({total,setOpenAddress}) => {
     const navigate = useNavigate();
-    const cart = useSelector((state) => state.Cart_Reducer);
-    
+    const cart = useSelector((state) => state.cart);
+    const user = useSelector((state) => state.user);
+
     const [address, setAddress] = useState({
         houseNo: '',
         street: '',
         city: ''
     })
     const [mobile, setMobile] = useState('');
+
     const handleChange = (e, key) => {
         setAddress({ ...address, [key]: e.target.value });
     }
+
     const placeOrder = async () => {
         if (cart.length === 0) {
-            // toast.info("cart is empty!");
+            toast.info("cart is empty!");
             return;
         }
-        if (!window.localStorage.getItem("id") || !window.localStorage.getItem("token")) {
+        if (!user.token || !user._id) {
             navigate('/login')
-            // toast.info("login to place an order!");
+            toast.info("login to place an order!");
             return;
         }
         if (address.houseNo.length === 0 || address.street.length === 0 || address.city.length === 0) {
-            // toast.error("address required!");
+            toast.error("address required!");
             return;
         }
         if (mobile.length === 0) {
-            // toast.error("mobile number required!");
+            toast.error("mobile number required!");
             return;
         }
         const state = {
-            userId: window.localStorage.getItem("id"),
+            userId: user._id,
             items: cart,
             order_status: 'Placed',
             address,
             mobile,
-            token: window.localStorage.getItem("token"),
+            token: user._id,
             total
         }
         navigate('/payment' , {state: {details: state}})
     }
+    
     return (
         <Box style={ModalStyle}>
             <Typography style={heading}>Are you sure want to place this order?</Typography>
@@ -85,14 +90,10 @@ const Address = ({total,setOpenAddress}) => {
                 value={mobile}
                 onChange={(e) => setMobile(e.target.value)}
             />
-            <Box display="flex" gap="20px" justifyContent='center' className='modal-footer' marginTop='10px'>
-                <Button variant="outlined" className='cancel-btn' onClick={() => setOpenAddress(false)}>Cancel</Button>
-                <Button variant="contained" color='primary' className='confirm-btn' onClick={placeOrder}>Confirm</Button>
+            <Box display="flex" gap="20px" justifyContent='center' marginTop='10px'>
+                <Button variant="outlined" onClick={() => setOpenAddress(false)}>Cancel</Button>
+                <Button variant="contained" color='primary'  onClick={placeOrder}>Confirm</Button>
             </Box>
-            {/* <Button
-                style={{ width: '200px', background: '#222', color: '#fff', marginTop: '10px' }}
-                onClick={addHandler}
-            >Add Product</Button> */}
         </Box>
     )
 }
@@ -108,8 +109,6 @@ const input = {
     margin: "7px",
     width: "400px",
     color: "#791314",
-    // border: "1px solid #791314",
-    // borderRadius: "5px",
     padding: "2px",
     background: '#fff',
 };

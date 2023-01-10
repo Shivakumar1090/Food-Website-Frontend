@@ -3,6 +3,7 @@ import axios from "axios";
 import { Chip, Divider, Paper, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const { GET_PRODUCTS } = require('../../apis/products');
 
@@ -11,6 +12,7 @@ const DOMAIN = process.env.REACT_APP_DOMAIN;
 const Products = () => {
     const Navigate = useNavigate();
 
+    const user = useSelector(state => state.user);
     const [selectedHover, setSelectedHovered] = useState(null);
 
     const [products, setProducts] = useState([]);
@@ -19,12 +21,11 @@ const Products = () => {
         axios
             .get(GET_PRODUCTS, {
                 headers: {
-                    Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+                    Authorization: `Bearer ${user._id}`,
                 },
             })
             .then(async (res) => {
                 await setProducts(res.data);
-                console.log(products);
             })
             .catch((err) => {
                 console.log(err);
@@ -81,9 +82,6 @@ const list = {
     gap: '20px',
     rowGap: '50px',
     justifyContent: 'space-evenly',
-    // "@media only screen and (max-width: 726px)": {
-    //     gridTemplateColumns: 'auto auto',
-    // }
 }
 
 const paper = {

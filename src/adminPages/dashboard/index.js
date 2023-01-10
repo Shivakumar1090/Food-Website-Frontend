@@ -11,24 +11,41 @@ import ExitToAppSharpIcon from '@mui/icons-material/ExitToAppSharp';
 import DensitySmallSharpIcon from '@mui/icons-material/DensitySmallSharp';
 // import { getadminorders } from '../../../api/order';
 import { makeStyles } from '@mui/styles';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+
+const {GET_ORDERS} = require('../../apis/order');
 
 function AdminDashBoard() {
     const navigate = useNavigate();
     const classes = styles();
 
+    const user = useSelector(state => state.user);
+
     const [orders, setOrders] = useState([]);
+    const [canceledOrders , setCancelledOrders] = useState(0);
+    const [acceptedOrders , setAcceptedOrders] = useState(0);
+    const [outfordelivaryOrders ,setOutfordelivaryOrders ] = useState(0);
 
-    // useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => {
+        fetchOrders()
+    }, [])
 
-    //     getadminorders().then((res) => {
-    //         setOrders(res.data);
-    //     })
+    const fetchOrders = () => {
+        axios.post(GET_ORDERS , {})
+            .then(async(res) => {
+                await setOrders(res.data);
+            })
+            .catch(err => {
+                toast.error("something went wrong!");
+                console.log(err);
+            })
+    }
 
-    // }, [])
 
-
-    return <>{localStorage.getItem("isAdmin") ? <Box className={classes.adminDashboard}>
-        {/* <Navbar /> */}
+    return <>{user.isAdmin ? <Box className={classes.adminDashboard}>
         <Box className={classes.dashboard}>
             <Box className={classes.sidebar}>
                 <Box onClick={() => navigate("/admin")} className={classes.sidebarMenu}>
@@ -72,15 +89,15 @@ function AdminDashBoard() {
                 </Paper>
                 <Paper className={classes.orders} elevation={4}>
                     <Typography variant='h6' style={{ fontWeight: "bolder" }} color='secondary' > Accepted Orders</Typography>
-                    <Typography variant='h5' style={{ fontWeight: "bolder" }} >{orders.length}</Typography>
+                    <Typography variant='h5' style={{ fontWeight: "bolder" }} >{acceptedOrders}</Typography>
                 </Paper>
                 <Paper className={classes.orders} elevation={4}>
                     <Typography variant='h6' style={{ fontWeight: "bolder" }} color='secondary' >Cancelled Orders </Typography>
-                    <Typography variant='h5' style={{ fontWeight: "bolder" }} >{orders.length}</Typography>
+                    <Typography variant='h5' style={{ fontWeight: "bolder" }} >{canceledOrders}</Typography>
                 </Paper>
                 <Paper className={classes.orders} elevation={4}>
-                    <Typography variant='h6' style={{ fontWeight: "bolder" }} color='secondary' >Delivered Orders </Typography>
-                    <Typography variant='h5' style={{ fontWeight: "bolder" }} >{orders.length}</Typography>
+                    <Typography variant='h6' style={{ fontWeight: "bolder" }} color='secondary' >Out for Delivery Orders </Typography>
+                    <Typography variant='h5' style={{ fontWeight: "bolder" }} >{outfordelivaryOrders}</Typography>
                 </Paper>
             </Box>
         </Box>

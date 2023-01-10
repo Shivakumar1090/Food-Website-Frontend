@@ -1,21 +1,19 @@
 import React, { useState } from "react";
 import { Box, Button, InputBase, Typography } from "@mui/material";
-import MessagePopup from "../../components/MessagePopup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const { container, input, heading } = require("./styles");
 
 const { REGISTER } = require('../../apis/user');
 
 const CustomerRegisteration = () => {
+    const Navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
 
-    const [openPopUp, setOpenPopUp] = useState(false);
-    const [resp, setResp] = useState("");
-    const [severityMsg, setSeverityMsg] = useState("error");
 
     const registerHandler = () => {
         const newuser = {
@@ -26,19 +24,13 @@ const CustomerRegisteration = () => {
 
         axios.post(REGISTER, newuser)
             .then(async (res) => {
-                console.log("check")
-                console.log(res);
-                await setResp(res.data.Message);
-                await res.status === 200 ? setSeverityMsg("success") : setSeverityMsg("warning");
-                window.location.href = "/login";
+                await res.status === 200 ? toast.success(res.data.Message) : toast.warn(res.data.Message);
+                Navigate('/login')
             })
             .catch(async (err) => {
                 console.log(err);
-                await setResp(err.response.data.Message);
-                await err.response.status === 422 ? setSeverityMsg("warning") : setSeverityMsg("error");
+                await err.response.status === 422 ? toast.warn(err.response.data.Message) : toast.error(err.response.data.Message);
             })
-        setOpenPopUp(true);
-        setSeverityMsg("");
     }
 
     return (
@@ -71,12 +63,6 @@ const CustomerRegisteration = () => {
                     if you have account already then{" "}
                     <span><Link to="/login" style={{ color: '#791314' }}>Login Here</Link></span>
                 </Typography>
-                <MessagePopup
-                    message={resp}
-                    open={openPopUp}
-                    handleAlertClose={() => setOpenPopUp(!openPopUp)}
-                    severity={severityMsg}
-                />
             </Box>
         </div>
     );

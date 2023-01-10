@@ -7,32 +7,35 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 // import './orders.scss';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 import Order from './orderComp';
+import axios from 'axios';
 
-const {GET_USER_ORDERS} = require('../../apis/order');
+const {GET_ORDERS} = require('../../apis/order');
 
 const OrdersSection = () => {
   const [orders, setOrders] = useState([]);
   const [statusFilter, setStatusFilter] = useState("");
   const [fetching, setFetching] = useState(false);
-  const statusOptions = ['Placed', 'Accepted', 'Out for Delivery', 'Completed', 'Cancelled'];
+
+  const user = useSelector((state) => state.user);
+
+  const statusOptions = ['Placed', 'Accepted', 'Out for Delivery', 'Cancelled'];
 
   useEffect(() => {
     fetchOrders();
-  }, [statusFilter])
+  }, [])
 
   const fetchOrders = async () => {
     let payload = {
-      id: window.localStorage.getItem('id'),
-      token: window.localStorage.getItem('token'),
+      id: user._id,
+      token: user.token,
       status: statusFilter
     }
     setFetching(true);
     try {
-      const data = await axios.post(GET_USER_ORDERS , payload);
-      setOrders(data.data);
-      console.log(data);
+      const resp = await axios.post(GET_ORDERS, payload);
+      console.log(resp);
+      setOrders(resp);
       setFetching(false);
     } catch (err) {
       toast.error("couldn't fetch orders", { position: toast.POSITION.TOP_CENTER });
@@ -72,22 +75,6 @@ const OrdersSection = () => {
                 }
               </Box>
           }
-          
-          {/* <If condition={!fetching}>
-            <If condition={orders.length > 0}>
-              <Box display="flex" alignItems="center" flexWrap="wrap" gap="20px" className='items-list'>
-                {
-                  orders.map(item => <Order data={item}  fetchOrders={fetchOrders} />)
-                }
-              </Box>
-            </If>
-            <If condition={orders.length === 0}>
-              <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" className="noData-container">
-                <img className='empty-cart-icon' src={emptyList} alt="empty-cart" />
-                <Typography className="empty-text">No orders available!</Typography>
-              </Box>
-            </If>
-          </If> */}
         </Box>
       </Box>
   );
