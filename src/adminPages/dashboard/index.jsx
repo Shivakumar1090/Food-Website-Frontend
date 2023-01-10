@@ -37,13 +37,18 @@ function AdminDashBoard() {
         axios.post(GET_ORDERS , {})
             .then(async(res) => {
                 await setOrders(res.data);
+                console.log(res.data);
+                res.data.filter(ele => {
+                    ele.status === "Cancelled" && setCancelledOrders(canceledOrders+1);
+                    ele.status === "Accepted" && setAcceptedOrders(acceptedOrders+1);
+                    ele.status === "Out for Delivery" && setOutfordelivaryOrders(outfordelivaryOrders+1);
+                })
             })
             .catch(err => {
                 toast.error("something went wrong!");
                 console.log(err);
             })
     }
-
 
     return <>{user.isAdmin ? <Box className={classes.adminDashboard}>
         <Box className={classes.dashboard}>
@@ -96,7 +101,7 @@ function AdminDashBoard() {
                     <Typography variant='h5' style={{ fontWeight: "bolder" }} >{canceledOrders}</Typography>
                 </Paper>
                 <Paper className={classes.orders} elevation={4}>
-                    <Typography variant='h6' style={{ fontWeight: "bolder" }} color='secondary' >Out for Delivery Orders </Typography>
+                    <Typography style={{ fontWeight: "bolder",fontSize: '16px' }} color='secondary' >Out for Delivery Orders </Typography>
                     <Typography variant='h5' style={{ fontWeight: "bolder" }} >{outfordelivaryOrders}</Typography>
                 </Paper>
             </Box>

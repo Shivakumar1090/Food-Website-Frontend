@@ -42,9 +42,9 @@ const Welcome = () => {
             ))}
           </Carousel>
         </Box>
-        <Box textAlign='center' marginTop='15px'>
-          <Typography fontSize='20px' fontWeight='bold'>For all your Family buy our sweets</Typography>
-          <Button variant="outlined"  marginTop='10px' onClick={() => Navigate('/products')}>Shop Now!</Button>
+        <Box textAlign='center' marginTop='20px'>
+          <Typography fontSize='22px' fontWeight='bold'>You can't buy happiness, but you can buy dessert and that's kind of the same thing.</Typography>
+          <Button variant="outlined"  style={{marginTop: '10px'}} onClick={() => Navigate('/products')}>Shop Now!</Button>
         </Box>
       </Box>
     </div>

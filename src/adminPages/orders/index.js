@@ -10,13 +10,10 @@ const { GET_ORDERS,EDIT_ORDER } = require('../../apis/order');
 function AdminOrders() {
     const [orders, setOrders] = useState([]);
     const user = useSelector(state => state.user);
-    // const [statusUpdate, setstatusUpdate] = useState(false);
-    // const [statusFilter, setStatusFilter] = useState("");
     const [loading, setLoading] = useState(false);
 
     const statusOptions = ['Placed', 'Accepted', 'Out for Delivery', 'Completed'];
 
-    const [pickedOrder, setPickedOrder] = useState(null);
 
     useEffect(() => {
         fetchOrders()
@@ -48,10 +45,10 @@ function AdminOrders() {
         }
     }
 
-    const onEditOrder = async (payload) => {
+    const onEditOrder = async (payload,orderId) => {
         setLoading(true);
         try {
-            await editOrder(payload, pickedOrder._id);
+            await editOrder(payload, orderId);
             toast.success("order updated succesfully!", { position: toast.POSITION.BOTTOM_RIGHT })
             setLoading(false);
             fetchOrders();
@@ -107,10 +104,7 @@ function AdminOrders() {
                                             {
                                                 order.status !== "Cancelled" &&
                                                 <TableCell style={{ textAlign: 'center' }} align='right'>
-                                                    <Button onClick={async () => { 
-                                                        await setPickedOrder(order) 
-                                                        onEditOrder({ status: nextState });
-                                                        }}>Mark as {nextState}</Button>
+                                                    <Button onClick={() => onEditOrder({ status: nextState },order._id)}>Mark as {nextState}</Button>
                                                 </TableCell>
                                             }
                                         </TableRow>

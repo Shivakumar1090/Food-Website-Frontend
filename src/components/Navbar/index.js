@@ -10,6 +10,7 @@ import LadduImg from "./laddu.png";
 
 import { useDispatch, useSelector } from "react-redux";
 import { Logout } from "../../redux/actions/user";
+import { ClearCart } from "../../redux/actions/cart";
 
 
 const Navbar = () => {
@@ -20,6 +21,7 @@ const Navbar = () => {
 
     const logoutHandler = () => {
         dispatch(Logout());
+        dispatch(ClearCart)
         window.localStorage.clear();
         window.location.href="/";
     };
@@ -28,7 +30,7 @@ const Navbar = () => {
             <Box style={appbar} elevation={0}>
                 <Stack spacing={1} direction='row' style={autoMargins}>
                     <img src={LadduImg} alt="" style={{ width: "30px", height: "30px",}} />
-                    <Link to="/" style={{ textDecoration: "none" }}>
+                    <Link to={user.isAdmin ? "/admin" : "/"} style={{ textDecoration: "none" }}>
                         <Typography style={logo}>sWeee_sHopp</Typography>
                     </Link>
                 </Stack>
@@ -52,16 +54,19 @@ const Navbar = () => {
                                 Hi... {user.name} 
                             </Typography>
                         }
-                        {user.isLogged && 
+                        {user.isLogged && !user.isAdmin &&
                             <Button onClick={() => Navigate('/orders')}>Your Orders</Button>
                         }
-                        <Link to="/cart" style={{ textDecoration: "none"}} >
-                            <Tooltip title='Cart' arrow disableInteractive>
-                                <Badge badgeContent={cart.length} color="primary" overlap="circular">
-                                    <LocalMallOutlinedIcon style={icon}/>
-                                </Badge>
-                            </Tooltip>
-                        </Link>
+                        {
+                            user.isLogged && !user.isAdmin &&
+                            <Link to="/cart" style={{ textDecoration: "none"}} >
+                                <Tooltip title='Cart' arrow disableInteractive>
+                                    <Badge badgeContent={cart.length} color="primary" overlap="circular">
+                                        <LocalMallOutlinedIcon style={icon}/>
+                                    </Badge>
+                                </Tooltip>
+                            </Link>
+                        }
                         {user.isLogged ? 
                             <Tooltip title="Logout" arrow disableInteractive>
                                 <LogoutIcon style={icon} cursor='pointer' onClick={logoutHandler}></LogoutIcon>

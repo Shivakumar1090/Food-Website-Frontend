@@ -35,7 +35,7 @@ const OrdersSection = () => {
     try {
       const resp = await axios.post(GET_ORDERS, payload);
       console.log(resp);
-      setOrders(resp);
+      setOrders(resp.data);
       setFetching(false);
     } catch (err) {
       toast.error("couldn't fetch orders", { position: toast.POSITION.TOP_CENTER });
