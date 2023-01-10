@@ -5,7 +5,14 @@ SweeStore Backend Github Link : https://github.com/Shivakumar1090/SweeStore-Back
 
 ## Sample Video of WEBISTE  📽️:
 
-https://user-images.githubusercontent.com/85950488/211551124-c2916435-4478-4c96-b592-70db5a634ae7.mp4
+
+<p>Customers web pages video </p>
+
+https://user-images.githubusercontent.com/85950488/211631347-e8da0d16-ee9b-4a19-812f-bd6b59dd1b04.mp4
+
+<p>Admin web pages video </p>
+
+https://user-images.githubusercontent.com/85950488/211626510-7fb04f39-a91b-4e62-a461-9d77fe5f0e76.mp4
 
 
 ## Technologies Used 👨🏽‍💻:
@@ -14,12 +21,6 @@ https://user-images.githubusercontent.com/85950488/211551124-c2916435-4478-4c96-
 3. Mongodb Atlas(Database)
 4. HTML , CSS , JavaScript
 5. Material UI
-
-
-## Features 📋
-🔥 Cart\
-🔥 Order Tracking\
-🔥 User Authentication
 
 ## Installation 📦
 
@@ -34,24 +35,3 @@ https://user-images.githubusercontent.com/85950488/211551124-c2916435-4478-4c96-
 > Go to localhost:3000
 
 ----
-
-
-## Contributing 💡
-
-
-#### Step 1
-
-- **Option 1**
-    - 🍴 Fork this repo!
-
-- **Option 2**
-    - 👯 Clone this repo to your local machine.
-
-
-#### Step 2
-
-- **Build your code** 🔨🔨🔨
-
-#### Step 3
-
-- 🔃 Create a new pull request.
